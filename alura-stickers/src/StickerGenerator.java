@@ -24,7 +24,7 @@ public class StickerGenerator {
 
         Graphics2D graphics = newImage.createGraphics();
         graphics.drawImage(img, 0, 0, null);
-        Font font = new Font(Font.SANS_SERIF, Font.BOLD, 64);
+        Font font = getFont();
         graphics.setFont(font);
         graphics.setColor(YELLOW);
         graphics.drawString(msg, 100, newImage.getHeight() - 100);
@@ -38,6 +38,17 @@ public class StickerGenerator {
             ImageIO.write(newImage, "png", new File(OUTPUT_DIRECTORY + saveAs + ".png"));
         } catch (IOException ignored) {
         }
+    }
+
+    private Font getFont() {
+        Font font;
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("alura-stickers/resources/fonts/impact.ttf")).deriveFont(64f);
+        } catch (FontFormatException | IOException e) {
+            font = new Font(Font.SANS_SERIF, Font.BOLD, 64);
+        }
+
+        return font;
     }
 
     private BufferedImage getImage(String strURL) {
