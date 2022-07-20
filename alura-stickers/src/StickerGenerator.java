@@ -25,9 +25,17 @@ public class StickerGenerator {
         Graphics2D graphics = newImage.createGraphics();
         graphics.drawImage(img, 0, 0, null);
         Font font = getFont();
+
+        FontMetrics metrics = graphics.getFontMetrics(font);
+        int textWidth = metrics.stringWidth(msg);
+        int textHeight = metrics.getHeight();
+
+        int xPos = (newImage.getWidth() - textWidth) / 2;
+        int yPos = newImage.getHeight() - (HEIGHT_OFFSET - textHeight) / 2;
+
         graphics.setFont(font);
         graphics.setColor(YELLOW);
-        graphics.drawString(msg, 100, newImage.getHeight() - 100);
+        graphics.drawString(msg, xPos, yPos);
 
         File directory = new File(OUTPUT_DIRECTORY);
         if (!directory.exists()){
