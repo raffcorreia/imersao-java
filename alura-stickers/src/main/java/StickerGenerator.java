@@ -1,3 +1,5 @@
+package main.java;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -43,7 +45,7 @@ public class StickerGenerator {
         }
         
         try {
-            ImageIO.write(newImage, "png", new File(OUTPUT_DIRECTORY + saveAs + ".png"));
+            ImageIO.write(newImage, "png", new File(OUTPUT_DIRECTORY + saveAs.replaceAll("[^a-zA-Z0-9]", "") + ".png"));
         } catch (IOException ignored) {
         }
     }
@@ -51,7 +53,7 @@ public class StickerGenerator {
     private Font getFont() {
         Font font;
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("alura-stickers/resources/fonts/impact.ttf")).deriveFont(64f);
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("alura-stickers/src/resources/fonts/impact.ttf")).deriveFont(64f);
         } catch (FontFormatException | IOException e) {
             font = new Font(Font.SANS_SERIF, Font.BOLD, 64);
         }
