@@ -1,7 +1,7 @@
-package main.java;
+package com.alurastickers;
 
-import main.java.extractor.Content;
-import main.java.extractor.ExtractorImDb;
+import com.alurastickers.extractor.ExtractorImDb;
+import com.alurastickers.extractor.Content;
 
 import java.net.URI;
 import java.net.http.HttpClient;

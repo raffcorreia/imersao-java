@@ -1,4 +1,4 @@
-package main.java;
+package com.alurastickers;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -53,7 +53,7 @@ public class StickerGenerator {
     private Font getFont() {
         Font font;
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("alura-stickers/src/resources/fonts/impact.ttf")).deriveFont(64f);
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("alura-stickers/src/main/resources/fonts/impact.ttf")).deriveFont(64f);
         } catch (FontFormatException | IOException e) {
             font = new Font(Font.SANS_SERIF, Font.BOLD, 64);
         }

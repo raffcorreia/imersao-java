@@ -1,4 +1,4 @@
-package main.java.extractor;
+package com.alurastickers.extractor;
 
 import java.util.List;
 

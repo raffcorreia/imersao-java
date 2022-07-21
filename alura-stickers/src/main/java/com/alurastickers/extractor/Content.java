@@ -1,4 +1,4 @@
-package main.java.extractor;
+package com.alurastickers.extractor;
 
 public class Content {
     private final String title;
