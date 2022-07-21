@@ -17,10 +17,16 @@ public class ExtractorImDb implements Extractor{
 
         for (Map<String, String> movie : movieList) {
             if(idFilter == null || idFilter.contains(movie.get("id"))) {
-                result.add(new Content(movie.get("title"), movie.get("image")));
+                result.add(new Content(movie.get("title"), cleanImgURL(movie.get("image"))));
             }
         }
 
         return result;
+    }
+
+    private static String cleanImgURL(String url) {
+        int paramBeginIndex = url.lastIndexOf("@");
+        int typeBeginIndex = url.lastIndexOf(".");
+        return url.substring(0, paramBeginIndex + 1) + url.substring(typeBeginIndex, typeBeginIndex + 4);
     }
 }

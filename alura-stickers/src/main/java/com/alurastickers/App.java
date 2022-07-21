@@ -1,19 +1,18 @@
 package com.alurastickers;
 
-import com.alurastickers.extractor.ExtractorImDb;
 import com.alurastickers.extractor.Content;
+import com.alurastickers.extractor.Extractor;
+import com.alurastickers.extractor.ExtractorImDb;
+import com.alurastickers.extractor.ExtractorNasa;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class App {
     public static final String URL = "https://imdb-api.com/en/API/Top250Movies/";
-    public static final String URL_MOCK = "";// "https://mocki.io/v1/9a7c1ca9-29b4-4eb3-8306-1adb9d159060";
+    public static final String URL_MOCK = "https://mocki.io/v1/9a7c1ca9-29b4-4eb3-8306-1adb9d159060";
+    private static final String URL_NASA = "https://api.nasa.gov/planetary/apod?api_key={DEMO_KEY}&start_date=2022-06-12&end_date=2022-06-14";
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_HEART = "\u2665";
@@ -25,32 +24,26 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         String url = URL.equals("") ? URL_MOCK : URL + args[0];
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest
-                .newBuilder(URI.create(url))
-                .GET()
-                .build();
+        String urlNasa = URL_NASA.replace("{DEMO_KEY}", args[1]);
 
-        HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-        String body = response.body();
+        Client client = new Client();
 
-        ExtractorImDb extractorImdb = new ExtractorImDb();
-        List<Content> contents = extractorImdb.extractContent(body, Arrays.asList(args[2].split("\\|")));
+        Extractor extractorImdb = new ExtractorImDb();
+        Extractor extractorNasa = new ExtractorNasa();
+
+        List<Content> contents = new ArrayList<>();
+
+        contents.addAll(extractorImdb.extractContent(client.buscaDados(url), Arrays.asList(args[2].split("\\|"))));
+        contents.addAll(extractorNasa.extractContent(client.buscaDados(urlNasa), null));
 
         StickerGenerator stickerGenerator = new StickerGenerator();
 
         for (Content content : contents) {
-            stickerGenerator.create(cleanImgURL(content.getImgUrl()), content.getTitle(), "TOPZERA");
+            stickerGenerator.create(content.getImgUrl(), content.getTitle(), "TOPZERA");
 
             System.out.printf("%s%sTITLE:%s %s%s %s\n",
                     ANSI_BLACK_BACKGROUND, ANSI_WHITE, ANSI_RESET, ANSI_BLUE, content.getTitle(),
                     ANSI_RED + ANSI_HEART + ANSI_RESET);
         }
-    }
-
-    private static String cleanImgURL(String url) {
-        int paramBeginIndex = url.lastIndexOf("@");
-        int typeBeginIndex = url.lastIndexOf(".");
-        return url.substring(0, paramBeginIndex + 1) + url.substring(typeBeginIndex, typeBeginIndex + 4);
     }
 }
