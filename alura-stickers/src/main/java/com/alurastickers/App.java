@@ -21,8 +21,6 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        Client client = new Client();
-
         Extractor extractorImdb = new ExtractorImDb(args[0]);
         Extractor extractorNasa = new ExtractorNasa(args[1]);
 
