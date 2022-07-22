@@ -1,30 +1,31 @@
 package com.alurastickers.extractor;
 
-import com.alurastickers.JsonParser;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class ExtractorImDb implements Extractor{
 
-    @Override
-    public List<Content> extractContent(String json, List<String> idFilter) {
-        List<Content> result = new ArrayList<>();
+public class ExtractorImDb extends Extractor {
 
-        JsonParser parser = new JsonParser();
-        List<Map<String, String>> movieList = parser.parse(json);
+    private static final String URL = "https://imdb-api.com/en/API/Top250Movies/{API_KEY}";
+//    private static final String URL = "https://mocki.io/v1/9a7c1ca9-29b4-4eb3-8306-1adb9d159060";
+    private static final String ID_FIELD = "id";
+    private static final String TITLE_FIELD = "title";
+    private static final String URL_FIELD = "image";
 
-        for (Map<String, String> movie : movieList) {
-            if(idFilter == null || idFilter.contains(movie.get("id"))) {
-                result.add(new Content(movie.get("title"), cleanImgURL(movie.get("image"))));
-            }
-        }
-
-        return result;
+    public ExtractorImDb(String apiKey) {
+        super(apiKey, ID_FIELD, TITLE_FIELD, URL_FIELD);
     }
 
-    private static String cleanImgURL(String url) {
+    public List<Content> extractContent(String json, List<String> idFilter) {
+        return super.defaultContentExtractor(json, idFilter);
+    }
+
+    @Override
+    public List<Content> fetchAndExtractContent(List<String> idFilter) {
+        return super.fetchAndExtractContent(URL, idFilter);
+    }
+
+    @Override
+    protected String processUrl(String url) {
         int paramBeginIndex = url.lastIndexOf("@");
         int typeBeginIndex = url.lastIndexOf(".");
         return url.substring(0, paramBeginIndex + 1) + url.substring(typeBeginIndex, typeBeginIndex + 4);

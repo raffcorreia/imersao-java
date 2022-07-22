@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 
 public class Client {
 
-    public String buscaDados(String url) {
+    public String getData(String url) {
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest

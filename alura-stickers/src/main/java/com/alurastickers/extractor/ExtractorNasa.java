@@ -1,26 +1,25 @@
 package com.alurastickers.extractor;
 
-import com.alurastickers.JsonParser;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class ExtractorNasa implements Extractor {
+public class ExtractorNasa extends Extractor {
+
+    private static final String URL = "https://api.nasa.gov/planetary/apod?api_key={API_KEY}&start_date=2022-06-12&end_date=2022-06-14";
+    private static final String ID_FIELD = "id";
+    private static final String TITLE_FIELD = "title";
+    private static final String URL_FIELD = "url";
+
+    public ExtractorNasa(String apiKey) {
+        super(apiKey, ID_FIELD, TITLE_FIELD, URL_FIELD);
+    }
 
     @Override
     public List<Content> extractContent(String json, List<String> nameFilter) {
-        List<Content> result = new ArrayList<>();
+        return super.defaultContentExtractor(json, nameFilter);
+    }
 
-        JsonParser parser = new JsonParser();
-        List<Map<String, String>> movieList = parser.parse(json);
-
-        for (Map<String, String> movie : movieList) {
-            if(nameFilter == null || nameFilter.contains(movie.get("id"))) {
-                result.add(new Content(movie.get("title"), movie.get("url")));
-            }
-        }
-
-        return result;
+    @Override
+    public List<Content> fetchAndExtractContent(List<String> idFilter) {
+        return super.fetchAndExtractContent(URL, idFilter);
     }
 }
