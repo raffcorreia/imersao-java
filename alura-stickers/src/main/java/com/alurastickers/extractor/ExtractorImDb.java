@@ -2,6 +2,8 @@ package com.alurastickers.extractor;
 
 import java.util.List;
 
+import static com.alurastickers.Util.IMDB_API_KEY;
+
 
 public class ExtractorImDb extends Extractor {
 
@@ -11,8 +13,8 @@ public class ExtractorImDb extends Extractor {
     private static final String TITLE_FIELD = "title";
     private static final String URL_FIELD = "image";
 
-    public ExtractorImDb(String apiKey) {
-        super(apiKey, ID_FIELD, TITLE_FIELD, URL_FIELD);
+    public ExtractorImDb() {
+        super(IMDB_API_KEY, ID_FIELD, TITLE_FIELD, URL_FIELD);
     }
 
     public List<Content> extractContent(String json, List<String> idFilter) {

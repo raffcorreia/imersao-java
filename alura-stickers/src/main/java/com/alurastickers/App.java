@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.alurastickers.Util.*;
+
 public class App {
 
     private static final String ANSI_RESET = "\u001B[0m";
@@ -20,13 +22,16 @@ public class App {
     private static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
 
     public static void main(String[] args) throws Exception {
+        IMDB_API_KEY = args[0];
+        NASA_API_KEY = args[1];
+        Util.setFavoriteMovieListFromString(args[2]);
 
-        Extractor extractorImdb = new ExtractorImDb(args[0]);
-        Extractor extractorNasa = new ExtractorNasa(args[1]);
+        Extractor extractorImdb = new ExtractorImDb();
+        Extractor extractorNasa = new ExtractorNasa();
 
         List<Content> contents = new ArrayList<>();
 
-        contents.addAll(extractorImdb.fetchAndExtractContent(Arrays.asList(args[2].split("\\|"))));
+        contents.addAll(extractorImdb.fetchAndExtractContent(FAVORITE_MOVIE_IDS));
         contents.addAll(extractorNasa.fetchAndExtractContent(null));
 
         StickerGenerator stickerGenerator = new StickerGenerator();
