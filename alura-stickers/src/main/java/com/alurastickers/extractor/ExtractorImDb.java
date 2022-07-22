@@ -2,6 +2,7 @@ package com.alurastickers.extractor;
 
 import java.util.List;
 
+import static com.alurastickers.Util.FAVORITE_MOVIE_IDS;
 import static com.alurastickers.Util.IMDB_API_KEY;
 
 
@@ -22,8 +23,8 @@ public class ExtractorImDb extends Extractor {
     }
 
     @Override
-    public List<Content> fetchAndExtractContent(List<String> idFilter) {
-        return super.fetchAndExtractContent(URL, idFilter);
+    public List<Content> fetchAndExtractContent() {
+        return super.fetchAndExtractContent(URL, FAVORITE_MOVIE_IDS);
     }
 
     @Override

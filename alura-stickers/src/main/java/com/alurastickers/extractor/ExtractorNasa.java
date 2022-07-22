@@ -21,7 +21,7 @@ public class ExtractorNasa extends Extractor {
     }
 
     @Override
-    public List<Content> fetchAndExtractContent(List<String> idFilter) {
-        return super.fetchAndExtractContent(URL, idFilter);
+    public List<Content> fetchAndExtractContent() {
+        return super.fetchAndExtractContent(URL, null);
     }
 }

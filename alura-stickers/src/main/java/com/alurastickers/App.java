@@ -1,15 +1,14 @@
 package com.alurastickers;
 
 import com.alurastickers.extractor.Content;
-import com.alurastickers.extractor.Extractor;
-import com.alurastickers.extractor.ExtractorImDb;
-import com.alurastickers.extractor.ExtractorNasa;
+import com.alurastickers.extractor.Extractors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.alurastickers.Util.*;
+import static com.alurastickers.Util.IMDB_API_KEY;
+import static com.alurastickers.Util.NASA_API_KEY;
 
 public class App {
 
@@ -26,13 +25,17 @@ public class App {
         NASA_API_KEY = args[1];
         Util.setFavoriteMovieListFromString(args[2]);
 
-        Extractor extractorImdb = new ExtractorImDb();
-        Extractor extractorNasa = new ExtractorNasa();
-
-        List<Content> contents = new ArrayList<>();
-
-        contents.addAll(extractorImdb.fetchAndExtractContent(FAVORITE_MOVIE_IDS));
-        contents.addAll(extractorNasa.fetchAndExtractContent(null));
+        List<Content> contents = Stream.of(Extractors.values())
+                .map(Extractors::getExtractor)
+                .map(p -> {
+                    try {
+                        return p.getDeclaredConstructor().newInstance().fetchAndExtractContent();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .flatMap(Collection::stream)
+                .toList();
 
         StickerGenerator stickerGenerator = new StickerGenerator();
 

@@ -23,7 +23,7 @@ public abstract class Extractor {
     }
 
     public abstract List<Content> extractContent(String json, List<String> idFilter);
-    public abstract List<Content> fetchAndExtractContent(List<String> idFilter);
+    public abstract List<Content> fetchAndExtractContent();
     protected List<Content> fetchAndExtractContent(String url, List<String> idFilter) {
         return this.defaultContentExtractor(this.fetch(url), idFilter);
     }
