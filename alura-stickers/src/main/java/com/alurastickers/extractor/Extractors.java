@@ -2,7 +2,8 @@ package com.alurastickers.extractor;
 
 public enum Extractors {
     IMDB(ExtractorImDb.class),
-    NASA(ExtractorNasa.class);
+    NASA(ExtractorNasa.class),
+    SINGLE(ExtractorSingle.class);
 
     private final Class<? extends Extractor> extractor;
 

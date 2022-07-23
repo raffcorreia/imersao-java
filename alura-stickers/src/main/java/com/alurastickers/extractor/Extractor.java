@@ -15,6 +15,13 @@ public abstract class Extractor {
     private final String titleField;
     private final String urlField;
 
+    protected Extractor() {
+        this.apiKey = "";
+        this.idField = null;
+        this.titleField = null;
+        this.urlField = null;
+    }
+
     protected Extractor(String apiKey, String idField, String titleField, String urlField) {
         this.apiKey = apiKey;
         this.idField = idField;
@@ -25,10 +32,10 @@ public abstract class Extractor {
     public abstract List<Content> extractContent(String json, List<String> idFilter);
     public abstract List<Content> fetchAndExtractContent();
     protected List<Content> fetchAndExtractContent(String url, List<String> idFilter) {
-        return this.defaultContentExtractor(this.fetch(url), idFilter);
+        return this.defaultContentExtractor(this.fetchJsonImgList(url), idFilter);
     }
 
-    protected String fetch(String url) {
+    protected String fetchJsonImgList(String url) {
         Client client = new Client();
         return client.getData(url.replace(API_KEY_LABEl, this.apiKey));
     }
