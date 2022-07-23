@@ -22,12 +22,30 @@ public class StickerGenerator {
             return;
         }
 
-        BufferedImage newImage = new BufferedImage(img.getWidth(), img.getHeight() + HEIGHT_OFFSET, TRANSLUCENT);
+        int newImgWidth = img.getWidth();
+        int newImgHeight = img.getHeight() + HEIGHT_OFFSET;
+        BufferedImage newImage = new BufferedImage(newImgWidth, newImgHeight, TRANSLUCENT);
 
         Graphics2D graphics = newImage.createGraphics();
         graphics.drawImage(img, 0, 0, null);
-        Font font = getFont();
 
+        addMessage(msg, newImage, graphics);
+        addStamp(newImgWidth, newImgHeight, graphics);
+
+        File directory = new File(OUTPUT_DIRECTORY);
+        if (!directory.exists()){
+            directory.mkdir();
+        }
+        
+        try {
+            ImageIO.write(newImage, "png", new File(OUTPUT_DIRECTORY + saveAs.replaceAll("[^a-zA-Z0-9]", "") + ".png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void addMessage(String msg, BufferedImage newImage, Graphics2D graphics) {
+        Font font = getFont();
         FontMetrics metrics = graphics.getFontMetrics(font);
         int textWidth = metrics.stringWidth(msg);
         int textHeight = metrics.getHeight();
@@ -38,16 +56,20 @@ public class StickerGenerator {
         graphics.setFont(font);
         graphics.setColor(YELLOW);
         graphics.drawString(msg, xPos, yPos);
+    }
 
-        File directory = new File(OUTPUT_DIRECTORY);
-        if (!directory.exists()){
-            directory.mkdir();
-        }
-        
+    private void addStamp(int newImgWidth, int newImgHeight, Graphics2D graphics) {
+        File imgStampFile = new File("alura-stickers/src/main/resources/img/stamp.png");
+        BufferedImage imgStamp = null;
         try {
-            ImageIO.write(newImage, "png", new File(OUTPUT_DIRECTORY + saveAs.replaceAll("[^a-zA-Z0-9]", "") + ".png"));
-        } catch (IOException ignored) {
+            imgStamp = ImageIO.read(imgStampFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        int stampWidth = (int)(imgStamp.getWidth() * (150f / imgStamp.getHeight()));
+        int stampHeight = 150;
+        graphics.drawImage(imgStamp, newImgWidth - stampWidth, newImgHeight - stampHeight, stampWidth, stampHeight, null);
     }
 
     private Font getFont() {
